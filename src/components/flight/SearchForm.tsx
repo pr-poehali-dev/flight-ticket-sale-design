@@ -1,9 +1,15 @@
-
-import { useState } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import Icon from '@/components/ui/icon';
-import { TripType, TripTypeSelector, CitySelector, DateSelector, PassengerSelector, SearchButton } from './SearchFormComponents';
-import { addDays } from 'date-fns';
+import { useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Icon from "@/components/ui/icon";
+import {
+  TripType,
+  TripTypeSelector,
+  CitySelector,
+  DateSelector,
+  PassengerSelector,
+  SearchButton,
+} from "./SearchFormComponents";
+import { addDays } from "date-fns";
 
 /**
  * Компонент формы поиска авиабилетов
@@ -11,25 +17,36 @@ import { addDays } from 'date-fns';
  */
 const SearchForm = () => {
   // Состояния формы
-  const [fromCity, setFromCity] = useState('');
-  const [toCity, setToCity] = useState('');
-  const [tripType, setTripType] = useState<TripType>('roundTrip');
-  const [departureDate, setDepartureDate] = useState<Date | undefined>(addDays(new Date(), 7));
-  const [returnDate, setReturnDate] = useState<Date | undefined>(addDays(new Date(), 14));
-  const [passengers, setPassengers] = useState('1');
+  const [fromCity, setFromCity] = useState("");
+  const [toCity, setToCity] = useState("");
+  const [tripType, setTripType] = useState<TripType>("roundTrip");
+  const [departureDate, setDepartureDate] = useState<Date | undefined>(
+    addDays(new Date(), 7),
+  );
+  const [returnDate, setReturnDate] = useState<Date | undefined>(
+    addDays(new Date(), 14),
+  );
+  const [passengers, setPassengers] = useState("1");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Обработчик отправки формы
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({
-      fromCity,
-      toCity,
-      tripType,
-      departureDate,
-      returnDate,
-      passengers
-    });
-    // В реальном проекте здесь будет логика поиска или редирект на страницу результатов
+    setIsSubmitting(true);
+
+    // Имитация запроса к API
+    setTimeout(() => {
+      console.log({
+        fromCity,
+        toCity,
+        tripType,
+        departureDate,
+        returnDate,
+        passengers,
+      });
+      setIsSubmitting(false);
+      // В реальном проекте здесь будет логика поиска или редирект на страницу результатов
+    }, 1000);
   };
 
   // Функция для смены городов местами
@@ -43,7 +60,10 @@ const SearchForm = () => {
     <div className="bg-white rounded-xl shadow-lg p-6 md:p-8">
       <Tabs defaultValue="avia" className="w-full">
         <TabsList className="grid grid-cols-3 mb-4">
-          <TabsTrigger value="avia" className="data-[state=active]:bg-blue-500 data-[state=active]:text-white">
+          <TabsTrigger
+            value="avia"
+            className="data-[state=active]:bg-blue-500 data-[state=active]:text-white"
+          >
             <Icon name="Plane" className="w-4 h-4 mr-2" />
             Авиабилеты
           </TabsTrigger>
@@ -99,7 +119,10 @@ const SearchForm = () => {
                 </div>
 
                 {/* Кнопка поиска */}
-                <SearchButton className="lg:col-span-1" />
+                <SearchButton
+                  className="lg:col-span-1"
+                  isLoading={isSubmitting}
+                />
               </div>
             </div>
           </form>
